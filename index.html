@@ -1,0 +1,1498 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Sen Hồng - Chăm sóc mẹ & bé</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        "primary": "#c2185b",
+        "primary-light": "#e91e7a",
+        "primary-soft": "#fce4ec",
+        "primary-bg": "#fff0f3",
+        "accent": "#2e7d32",
+        "accent-light": "#a5d6a7",
+        "accent-bg": "#e8f5e9",
+        "warn": "#e65100",
+        "warn-bg": "#fff3e0",
+        "danger": "#c62828",
+        "danger-bg": "#ffebee",
+        "surface": "#faf8f5",
+        "card": "#ffffff",
+        "muted": "#78716c",
+        "border": "#e7e5e4",
+      },
+      fontFamily: { "body": ["Be Vietnam Pro", "sans-serif"] },
+      borderRadius: { "xl": "1.25rem", "2xl": "1.5rem", "3xl": "2rem" },
+    },
+  },
+}
+    </script>
+    <style>
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+        }
+
+        .mso {
+            font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .mso-o {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .page {
+            display: none;
+        }
+
+            .page.active {
+                display: block;
+                animation: fadeUp .3s ease;
+            }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse-soft {
+            0%,100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.04);
+            }
+        }
+
+        .pulse-soft {
+            animation: pulse-soft 2s infinite;
+        }
+
+        .role-tab {
+            transition: all .25s ease;
+        }
+
+            .role-tab.active {
+                background: linear-gradient(135deg, #c2185b, #e91e7a);
+                color: white;
+                box-shadow: 0 4px 16px rgba(194,24,91,.3);
+            }
+
+        .card-hover {
+            transition: transform .2s, box-shadow .2s;
+        }
+
+            .card-hover:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 30px rgba(0,0,0,.08);
+            }
+
+        .nav-item {
+            transition: all .2s ease;
+        }
+
+            .nav-item:hover {
+                background: #fce4ec;
+            }
+
+            .nav-item.active {
+                background: #fce4ec;
+                color: #c2185b;
+                font-weight: 700;
+            }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #d6d3d1;
+            border-radius: 999px;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.5);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+            .modal-overlay.open {
+                display: flex;
+                animation: fadeUp .2s ease;
+            }
+
+        .modal-box {
+            background: #fff;
+            border-radius: 1.5rem;
+            width: 100%;
+            max-width: 520px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 28px;
+            position: relative;
+        }
+
+        /* AI Chat */
+        .chat-messages {
+            max-height: 340px;
+            overflow-y: auto;
+        }
+
+        .chat-bubble-ai {
+            background: #fce4ec;
+            color: #3d0016;
+            border-radius: 1rem 1rem 1rem 4px;
+            padding: 12px 16px;
+            max-width: 85%;
+        }
+
+        .chat-bubble-user {
+            background: #c2185b;
+            color: #fff;
+            border-radius: 1rem 1rem 4px 1rem;
+            padding: 12px 16px;
+            max-width: 85%;
+            margin-left: auto;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #c2185b;
+            border-radius: 50%;
+            display: inline-block;
+            animation: typingBounce .9s infinite;
+        }
+
+            .typing-dot:nth-child(2) {
+                animation-delay: .15s;
+            }
+
+            .typing-dot:nth-child(3) {
+                animation-delay: .3s;
+            }
+
+        @keyframes typingBounce {
+            0%,80%,100% {
+                transform: translateY(0)
+            }
+
+            40% {
+                transform: translateY(-8px)
+            }
+        }
+
+        /* Emotion selected */
+        .emotion-btn.selected {
+            background: #c2185b;
+            color: white;
+            border-color: #c2185b;
+        }
+
+        /* Toast */
+        #toast {
+            position: fixed;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 999;
+            opacity: 0;
+            transition: opacity .3s;
+            pointer-events: none;
+        }
+
+            #toast.show {
+                opacity: 1;
+            }
+
+        /* Spinner */
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin .7s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-stone-800 min-h-screen">
+
+    <div id="toast"></div>
+
+    <!-- ===== TOP HEADER ===== -->
+    <header class="sticky top-0 z-[100] bg-white/90 backdrop-blur-xl shadow-sm border-b border-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary-light flex items-center justify-center text-white">
+                    <span class="material-symbols-outlined mso text-xl">spa</span>
+                </div>
+                <div class="hidden sm:block">
+                    <h1 class="text-lg font-extrabold text-primary leading-tight">Sen Hồng</h1>
+                    <p class="text-[11px] text-muted -mt-0.5">Chăm sóc mẹ & bé</p>
+                </div>
+            </div>
+            <div class="flex bg-stone-100 rounded-full p-1 gap-1">
+                <button onclick="switchPage('relative')" id="tab-relative" class="role-tab active text-sm font-bold px-4 py-2 rounded-full flex items-center gap-1.5">
+                    <span class="material-symbols-outlined mso text-lg">family_restroom</span> <span class="hidden sm:inline">Người thân</span>
+                </button>
+                <button onclick="switchPage('mother')" id="tab-mother" class="role-tab text-sm font-bold px-4 py-2 rounded-full text-stone-500 flex items-center gap-1.5">
+                    <span class="material-symbols-outlined mso text-lg">pregnant_woman</span> <span class="hidden sm:inline">Mẹ bầu</span>
+                </button>
+                <button onclick="switchPage('doctor')" id="tab-doctor" class="role-tab text-sm font-bold px-4 py-2 rounded-full text-stone-500 flex items-center gap-1.5">
+                    <span class="material-symbols-outlined mso text-lg">stethoscope</span> <span class="hidden sm:inline">Bác sĩ</span>
+                </button>
+            </div>
+            <div class="flex items-center gap-2">
+                <button onclick="openNotifications()" class="relative p-2.5 hover:bg-primary-soft rounded-full transition-colors">
+                    <span class="material-symbols-outlined mso-o text-stone-500 text-2xl">notifications</span>
+                    <span id="notif-dot" class="absolute top-2 right-2 w-2.5 h-2.5 bg-danger rounded-full border-2 border-white"></span>
+                </button>
+                <button onclick="openProfile()" class="p-2.5 hover:bg-primary-soft rounded-full transition-colors">
+                    <span class="material-symbols-outlined mso text-stone-500 text-2xl">account_circle</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ========================= PAGE 1: NGƯỜI THÂN ========================= -->
+    <div id="page-relative" class="page active">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-6 space-y-8 pb-28 lg:pb-10">
+
+            <section class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-primary-light to-pink-400 p-6 sm:p-10 text-white shadow-xl">
+                <div class="absolute top-[-30px] right-[-30px] opacity-10">
+                    <span class="material-symbols-outlined text-[10rem]">child_care</span>
+                </div>
+                <span class="inline-block px-4 py-1.5 bg-white/20 backdrop-blur rounded-full text-sm font-semibold mb-4">🌸 Giai đoạn: Tuần 28</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold leading-tight">Chỉ còn <span class="text-yellow-200">84 ngày</span><br />đến khi chào đón bé!</h2>
+                <p class="mt-3 text-pink-100 text-base max-w-lg leading-relaxed">Bé hiện tại đang to bằng một trái bí ngô nhỏ. Mẹ Lan cần bổ sung thêm sắt và canxi trong giai đoạn này.</p>
+                <div class="mt-6 flex flex-wrap gap-3">
+                    <button onclick="openDiary()" class="bg-white text-primary px-6 py-3 rounded-full font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform text-base">📖 Xem nhật ký</button>
+                    <button onclick="openBirthPlan()" class="bg-white/15 border border-white/30 text-white px-6 py-3 rounded-full font-bold backdrop-blur hover:bg-white/25 transition-colors text-base">📋 Kế hoạch sinh</button>
+                </div>
+            </section>
+
+            <section class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-card rounded-2xl p-5 shadow-sm card-hover border border-border cursor-pointer" onclick="openVitalDetail('weight')">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="material-symbols-outlined mso text-accent text-2xl">trending_up</span>
+                        <span class="text-sm font-semibold text-muted">Cân nặng mẹ</span>
+                    </div>
+                    <p class="text-2xl font-extrabold text-accent" id="stat-weight">+8.5 kg</p>
+                    <p class="text-sm text-accent mt-1">✅ Trong mức tốt</p>
+                </div>
+                <div class="bg-card rounded-2xl p-5 shadow-sm card-hover border border-border cursor-pointer" onclick="openVitalDetail('fetal')">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="material-symbols-outlined mso text-primary text-2xl">favorite</span>
+                        <span class="text-sm font-semibold text-muted">Cử động thai</span>
+                    </div>
+                    <p class="text-2xl font-extrabold text-primary" id="stat-fetal">Ổn định</p>
+                    <p class="text-sm text-muted mt-1" id="stat-fetal-sub">12 lần/giờ</p>
+                </div>
+                <div class="bg-card rounded-2xl p-5 shadow-sm card-hover border border-border cursor-pointer" onclick="openVitalDetail('bp')">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="material-symbols-outlined mso text-blue-600 text-2xl">blood_pressure</span>
+                        <span class="text-sm font-semibold text-muted">Huyết áp</span>
+                    </div>
+                    <p class="text-2xl font-extrabold text-blue-700" id="stat-bp">115/75</p>
+                    <p class="text-sm text-accent mt-1">✅ Bình thường</p>
+                </div>
+                <div class="bg-card rounded-2xl p-5 shadow-sm card-hover border border-border cursor-pointer" onclick="openVitalDetail('sleep')">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="material-symbols-outlined mso text-amber-600 text-2xl">bedtime</span>
+                        <span class="text-sm font-semibold text-muted">Giấc ngủ</span>
+                    </div>
+                    <p class="text-2xl font-extrabold text-amber-700" id="stat-sleep">6.5 giờ</p>
+                    <p class="text-sm text-warn mt-1">⚠️ Hơi thấp</p>
+                </div>
+            </section>
+
+            <section>
+                <div class="flex items-center justify-between mb-5">
+                    <h3 class="text-xl font-bold">💡 Gợi ý chăm sóc Mẹ Lan</h3>
+                    <button onclick="openAllSuggestions()" class="text-primary font-bold text-sm hover:underline">Xem tất cả →</button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <div class="bg-card rounded-2xl p-6 shadow-sm card-hover border border-border">
+                        <div class="w-14 h-14 bg-pink-50 text-primary rounded-2xl flex items-center justify-center mb-4">
+                            <span class="material-symbols-outlined mso text-3xl">psychology</span>
+                        </div>
+                        <h4 class="text-lg font-bold mb-2">Giảm bớt lo âu</h4>
+                        <p class="text-muted text-base leading-relaxed mb-5">Mẹ Lan có dấu hiệu mệt mỏi. Hãy giúp massage chân hoặc chuẩn bị bữa tối nhẹ nhàng.</p>
+                        <button id="btn-done-1" onclick="markCareDone(this,'Giảm bớt lo âu')" class="w-full py-3 bg-primary-soft text-primary font-bold rounded-xl hover:bg-pink-100 transition-colors text-base">✅ Đã thực hiện</button>
+                    </div>
+                    <div class="bg-card rounded-2xl p-6 shadow-sm card-hover border border-border">
+                        <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-4">
+                            <span class="material-symbols-outlined mso text-3xl">nightlight</span>
+                        </div>
+                        <h4 class="text-lg font-bold mb-2">Cải thiện giấc ngủ</h4>
+                        <p class="text-muted text-base leading-relaxed mb-5">Mẹ thức giấc nhiều ban đêm. Kê thêm gối ôm, điều chỉnh nhiệt độ 26°C.</p>
+                        <button onclick="saveReminder('Cải thiện giấc ngủ: Kê thêm gối ôm, điều chỉnh nhiệt độ 26°C')" class="w-full py-3 bg-blue-50 text-blue-700 font-bold rounded-xl hover:bg-blue-100 transition-colors text-base">💡 Lưu nhắc nhở</button>
+                    </div>
+                    <div class="bg-card rounded-2xl p-6 shadow-sm card-hover border border-border">
+                        <div class="w-14 h-14 bg-accent-bg text-accent rounded-2xl flex items-center justify-center mb-4">
+                            <span class="material-symbols-outlined mso text-3xl">restaurant</span>
+                        </div>
+                        <h4 class="text-lg font-bold mb-2">Dinh dưỡng tuần 28</h4>
+                        <p class="text-muted text-base leading-relaxed mb-5">Ưu tiên Omega-3 (cá hồi, hạt óc chó) hỗ trợ phát triển trí não bé.</p>
+                        <button onclick="openMealPlan()" class="w-full py-3 bg-gradient-to-r from-accent to-green-500 text-white font-bold rounded-xl shadow hover:shadow-md transition text-base">🍽️ Xem thực đơn</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="bg-card rounded-2xl p-6 shadow-sm border border-border">
+                    <h3 class="text-lg font-bold flex items-center gap-2 mb-5">
+                        <span class="material-symbols-outlined mso text-primary">upcoming</span> Hoạt động sắp tới
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="flex gap-4 items-start p-4 border-l-4 border-primary bg-primary-soft/50 rounded-r-xl">
+                            <div class="bg-primary-soft p-3 rounded-xl text-primary text-center min-w-[56px]">
+                                <p class="text-[11px] font-bold uppercase">Thứ 7</p>
+                                <p class="text-2xl font-black">12</p>
+                            </div>
+                            <div>
+                                <p class="font-bold text-base">Khám thai định kỳ (Tuần 28)</p>
+                                <p class="text-sm text-muted flex items-center gap-1 mt-1">📍 BV Đa khoa Đồng Nai</p>
+                                <p class="text-sm text-primary font-semibold mt-1" id="reminder-status">✅ Đã nhắc nhở Mẹ Lan</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 items-start p-4 border-l-4 border-accent bg-accent-bg/50 rounded-r-xl cursor-pointer" onclick="openClassInfo()">
+                            <div class="bg-accent-bg p-3 rounded-xl text-accent text-center min-w-[56px]">
+                                <p class="text-[11px] font-bold uppercase">CN</p>
+                                <p class="text-2xl font-black">13</p>
+                            </div>
+                            <div>
+                                <p class="font-bold text-base">Lớp học tiền sản online</p>
+                                <p class="text-sm text-muted flex items-center gap-1 mt-1">📹 Nền tảng Sen Hồng</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-card rounded-2xl p-6 shadow-sm border border-border">
+                    <h3 class="text-lg font-bold flex items-center gap-2 mb-5">
+                        <span class="material-symbols-outlined mso text-primary">history</span> Chỉ số tuần này
+                    </h3>
+                    <div class="space-y-3" id="vitals-list">
+                        <div class="flex items-center justify-between p-4 bg-surface rounded-xl">
+                            <div class="flex items-center gap-3">
+                                <div class="w-3 h-3 rounded-full bg-accent"></div>
+                                <div><p class="font-bold text-base">Huyết áp: 115/75 mmHg</p><p class="text-sm text-muted">Thứ 4, 15:30</p></div>
+                            </div>
+                            <span class="text-sm font-bold px-3 py-1 bg-accent-bg text-accent rounded-full">Tốt</span>
+                        </div>
+                        <div class="flex items-center justify-between p-4 bg-surface rounded-xl">
+                            <div class="flex items-center gap-3">
+                                <div class="w-3 h-3 rounded-full bg-accent"></div>
+                                <div><p class="font-bold text-base">Đường huyết: 92 mg/dL</p><p class="text-sm text-muted">Thứ 3, 07:00</p></div>
+                            </div>
+                            <span class="text-sm font-bold px-3 py-1 bg-accent-bg text-accent rounded-full">Ổn</span>
+                        </div>
+                        <div class="flex items-center justify-between p-4 bg-surface rounded-xl">
+                            <div class="flex items-center gap-3">
+                                <div class="w-3 h-3 rounded-full bg-amber-500"></div>
+                                <div><p class="font-bold text-base">Giấc ngủ: 6.5 giờ</p><p class="text-sm text-muted">Thứ 2, 08:00</p></div>
+                            </div>
+                            <span class="text-sm font-bold px-3 py-1 bg-warn-bg text-warn rounded-full">Thấp</span>
+                        </div>
+                    </div>
+                    <button onclick="openAddVital()" class="mt-4 w-full py-3 border-2 border-dashed border-stone-200 rounded-xl text-sm font-bold text-muted hover:bg-stone-50 transition">+ Cập nhật chỉ số mới</button>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- ========================= PAGE 2: MẸ BẦU ========================= -->
+    <div id="page-mother" class="page">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-6 space-y-8 pb-28 lg:pb-10">
+
+            <section class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-pink-500 to-pink-300 p-6 sm:p-10 text-white shadow-xl">
+                <div class="flex flex-col md:flex-row items-center gap-6">
+                    <div class="flex-1 space-y-4 text-center md:text-left">
+                        <span class="inline-block px-4 py-1.5 bg-white/20 backdrop-blur rounded-full text-sm font-semibold">🌱 Giai đoạn: Quý 1</span>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold leading-tight">Tuần 12:<br /><span class="text-yellow-200">Bé bằng quả Chanh</span></h2>
+                        <p class="text-base text-pink-100 max-w-md leading-relaxed">Hệ thống xương của bé đang cứng dần. Mẹ hãy bổ sung Canxi và Vitamin D trong tuần này nhé!</p>
+                        <div class="flex flex-wrap justify-center md:justify-start gap-3 pt-2">
+                            <button onclick="openWeekDetail()" class="px-6 py-3 bg-white text-primary font-bold rounded-full hover:scale-105 transition-transform text-base">📋 Xem chi tiết</button>
+                            <button onclick="openDiary()" class="px-6 py-3 border-2 border-white/40 text-white font-bold rounded-full hover:bg-white/10 transition text-base">📖 Nhật ký</button>
+                        </div>
+                    </div>
+                    <div class="w-48 h-48 md:w-56 md:h-56 relative flex-shrink-0">
+                        <div class="absolute inset-0 bg-white/10 rounded-full blur-3xl"></div>
+                        <img class="w-full h-full object-contain relative z-10 drop-shadow-2xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEFdbc0FKFibKwfb-3DCw48Hdz5UiSAgNm9N3Je_E9rGPDD_TW63y8P3VDx_pLnEmcvYvzmCeFX2YYpnDgqk2SwyouIRNgEXpRbDv8ueViq8TKhuQjG0o2InkAJzqD2ewG7rDhX3dcLq_im2rkZm3w1lRHh2sZZ3NA6sQocc5mC3vV5ogGXzX95jAkeEPj7xxWZKC6UvHYLHGAHgo3HIuQxtYN4PI_rKeojhbS01-KaxOTLLv0AfFWU-ICJadwdoVxDnQH24k4XFY" alt="Thai nhi tuần 12" />
+                    </div>
+                </div>
+            </section>
+
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+                <section class="xl:col-span-2 space-y-6">
+                    <h3 class="text-xl font-bold flex items-center gap-2">❤️ Cảm xúc của Mẹ hôm nay?</h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        <button onclick="selectEmotion(this,'Vui vẻ 😊')" class="emotion-btn group p-5 rounded-2xl bg-card border border-border hover:bg-primary hover:text-white hover:border-primary transition-all text-center space-y-2 card-hover">
+                            <span class="text-5xl block group-hover:scale-110 transition-transform">😊</span>
+                            <span class="text-base font-bold block">Vui vẻ</span>
+                        </button>
+                        <button onclick="selectEmotion(this,'Mệt mỏi 😴')" class="emotion-btn group p-5 rounded-2xl bg-card border border-border hover:bg-primary hover:text-white hover:border-primary transition-all text-center space-y-2 card-hover">
+                            <span class="text-5xl block group-hover:scale-110 transition-transform">😴</span>
+                            <span class="text-base font-bold block">Mệt mỏi</span>
+                        </button>
+                        <button onclick="selectEmotion(this,'Nhạy cảm 🤰')" class="emotion-btn group p-5 rounded-2xl bg-card border border-border hover:bg-primary hover:text-white hover:border-primary transition-all text-center space-y-2 card-hover">
+                            <span class="text-5xl block group-hover:scale-110 transition-transform">🤰</span>
+                            <span class="text-base font-bold block">Nhạy cảm</span>
+                        </button>
+                        <button onclick="selectEmotion(this,'Háo hức ✨')" class="emotion-btn group p-5 rounded-2xl bg-card border border-border hover:bg-primary hover:text-white hover:border-primary transition-all text-center space-y-2 card-hover">
+                            <span class="text-5xl block group-hover:scale-110 transition-transform">✨</span>
+                            <span class="text-base font-bold block">Háo hức</span>
+                        </button>
+                    </div>
+                    <div id="emotion-ai-tip" class="hidden bg-amber-50 rounded-2xl p-6 border border-amber-100 relative overflow-hidden">
+                        <span class="material-symbols-outlined absolute -right-4 -bottom-4 text-8xl text-amber-200/40 rotate-12">psychology</span>
+                        <h4 class="text-base font-bold text-amber-900 mb-2">💬 Lời khuyên từ AI</h4>
+                        <p id="emotion-ai-text" class="text-amber-800 text-base leading-relaxed max-w-md"></p>
+                    </div>
+                    <div class="bg-amber-50 rounded-2xl p-6 border border-amber-100 relative overflow-hidden">
+                        <span class="material-symbols-outlined absolute -right-4 -bottom-4 text-8xl text-amber-200/40 rotate-12">eco</span>
+                        <h4 class="text-lg font-bold text-amber-900 mb-2">🌿 Mẹo nhỏ cho mẹ</h4>
+                        <p class="text-amber-800 text-base leading-relaxed max-w-md">Bé bắt đầu có cử động nhỏ dù mẹ chưa cảm nhận được. Nghe nhạc nhẹ nhàng sẽ giúp cả mẹ và bé thư giãn!</p>
+                        <button onclick="openAIChat()" class="inline-flex items-center gap-1 text-primary font-bold text-sm mt-3">Hỏi AI thêm →</button>
+                    </div>
+                </section>
+
+                <section class="space-y-6">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xl font-bold">📝 Việc cần làm</h3>
+                        <button onclick="openAddTask()" class="text-primary text-sm font-bold">+ Thêm</button>
+                    </div>
+                    <div class="space-y-3" id="task-list">
+                        <!-- rendered by JS -->
+                    </div>
+                    <div class="bg-primary-soft rounded-2xl p-5 border border-pink-200">
+                        <p class="text-xs font-bold uppercase tracking-widest text-primary mb-3">📅 Lịch khám sắp tới</p>
+                        <div class="flex items-center gap-4">
+                            <div class="bg-white rounded-xl p-3 text-center min-w-[60px] shadow-sm">
+                                <p class="text-xs font-bold text-primary">Tháng 5</p>
+                                <p class="text-2xl font-black">15</p>
+                            </div>
+                            <div>
+                                <p class="font-bold text-base">Khám thai định kỳ</p>
+                                <p class="text-sm text-muted">8:30 sáng • BV Đồng Nai</p>
+                            </div>
+                        </div>
+                        <button onclick="openAddAppointment()" class="mt-4 w-full py-2 border-2 border-dashed border-pink-200 rounded-xl text-sm font-bold text-primary hover:bg-pink-50 transition">+ Thêm lịch hẹn</button>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================= PAGE 3: BÁC SĨ ========================= -->
+    <div id="page-doctor" class="page">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-8 pb-28 lg:pb-10">
+
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h2 class="text-2xl font-extrabold">🩺 Quản lý thai phụ</h2>
+                    <p class="text-muted text-base">BS. Nguyễn Thu Thủy — Khoa Sản, Đồng Nai</p>
+                </div>
+                <div class="flex items-center bg-stone-100 rounded-full px-4 py-2.5 gap-2 w-full sm:w-80">
+                    <span class="material-symbols-outlined mso-o text-muted">search</span>
+                    <input id="search-input" oninput="filterPatients()" class="bg-transparent border-none focus:ring-0 text-base w-full placeholder:text-stone-400" placeholder="Tìm tên, số điện thoại..." type="text" />
+                </div>
+            </div>
+
+            <section class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-card rounded-2xl p-5 shadow-sm border border-border card-hover relative overflow-hidden">
+                    <div class="absolute -right-3 -top-3 w-20 h-20 bg-primary-soft rounded-full opacity-60"></div>
+                    <p class="text-muted text-sm font-semibold mb-1">Tổng số thai phụ</p>
+                    <p class="text-3xl font-black text-primary" id="doc-total">1,284</p>
+                    <p class="text-sm text-accent font-semibold mt-2">📈 +12% so với tháng trước</p>
+                </div>
+                <div class="bg-card rounded-2xl p-5 shadow-sm border border-border card-hover relative overflow-hidden">
+                    <div class="absolute -right-3 -top-3 w-20 h-20 bg-accent-bg rounded-full opacity-60"></div>
+                    <p class="text-muted text-sm font-semibold mb-1">Khám trong ngày</p>
+                    <p class="text-3xl font-black text-accent" id="doc-today">42</p>
+                    <p class="text-sm text-muted font-semibold mt-2">⏳ 8 ca đang chờ</p>
+                </div>
+                <div class="bg-card rounded-2xl p-5 shadow-sm border border-border card-hover relative overflow-hidden">
+                    <div class="absolute -right-3 -top-3 w-20 h-20 bg-warn-bg rounded-full opacity-60"></div>
+                    <p class="text-muted text-sm font-semibold mb-1">Nguy cơ cao</p>
+                    <p class="text-3xl font-black text-warn" id="doc-risk">18</p>
+                    <p class="text-sm text-warn font-semibold mt-2">⚠️ Cần theo dõi sát</p>
+                </div>
+                <div class="bg-card rounded-2xl p-5 shadow-sm border border-border card-hover relative overflow-hidden">
+                    <div class="absolute -right-3 -top-3 w-20 h-20 bg-blue-50 rounded-full opacity-60"></div>
+                    <p class="text-muted text-sm font-semibold mb-1">Hoàn thành hồ sơ</p>
+                    <p class="text-3xl font-black text-blue-700">96%</p>
+                    <div class="mt-2 w-full bg-stone-100 h-2 rounded-full"><div class="bg-blue-600 h-full rounded-full" style="width:96%"></div></div>
+                </div>
+            </section>
+
+            <section class="flex flex-col md:flex-row gap-4 items-end justify-between">
+                <div class="flex flex-wrap gap-4 items-end">
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs font-bold text-muted uppercase tracking-wider">Huyện/Thị xã</label>
+                        <select id="filter-district" onchange="filterPatients()" class="bg-stone-100 border-none rounded-xl px-5 py-3 text-base focus:ring-2 focus:ring-primary/20 min-w-[180px]">
+                            <option>Tất cả địa điểm</option>
+                            <option>Biên Hòa</option>
+                            <option>Long Khánh</option>
+                            <option>Định Quán</option>
+                            <option>Xuân Lộc</option>
+                            <option>Trảng Bom</option>
+                            <option>Long Thành</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs font-bold text-muted uppercase tracking-wider">Dân tộc</label>
+                        <select id="filter-ethnic" onchange="filterPatients()" class="bg-stone-100 border-none rounded-xl px-5 py-3 text-base focus:ring-2 focus:ring-primary/20 min-w-[140px]">
+                            <option>Tất cả</option>
+                            <option>Kinh</option>
+                            <option>Chơ Ro</option>
+                            <option>Mạ</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs font-bold text-muted uppercase tracking-wider">Tình trạng</label>
+                        <div class="flex gap-2">
+                            <button id="filter-all" onclick="setStatusFilter('all',this)" class="bg-primary text-white text-sm font-bold px-5 py-3 rounded-xl">Tất cả</button>
+                            <button id="filter-normal" onclick="setStatusFilter('normal',this)" class="bg-stone-100 text-stone-600 text-sm font-bold px-5 py-3 rounded-xl hover:bg-accent-bg transition">Bình thường</button>
+                            <button id="filter-warn" onclick="setStatusFilter('warn',this)" class="bg-stone-100 text-stone-600 text-sm font-bold px-5 py-3 rounded-xl hover:bg-danger-bg transition">Cảnh báo</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="exportCSV()" class="flex items-center gap-2 bg-card border border-border px-5 py-3 rounded-xl text-sm font-bold shadow-sm hover:shadow transition">
+                        <span class="material-symbols-outlined text-lg">file_download</span> Xuất CSV
+                    </button>
+                    <button onclick="openAddPatient()" class="flex items-center gap-2 bg-gradient-to-r from-primary to-primary-light text-white px-5 py-3 rounded-xl text-sm font-bold shadow-lg hover:shadow-xl transition">
+                        <span class="material-symbols-outlined text-lg">person_add</span> Thêm thai phụ
+                    </button>
+                </div>
+            </section>
+
+            <div class="bg-card rounded-2xl shadow-sm border border-border overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="bg-stone-50">
+                                <th class="px-6 py-4 text-xs font-black text-muted uppercase tracking-widest">Thai phụ</th>
+                                <th class="px-6 py-4 text-xs font-black text-muted uppercase tracking-widest">Tuần thai</th>
+                                <th class="px-6 py-4 text-xs font-black text-muted uppercase tracking-widest">Địa chỉ</th>
+                                <th class="px-6 py-4 text-xs font-black text-muted uppercase tracking-widest">Dân tộc</th>
+                                <th class="px-6 py-4 text-xs font-black text-muted uppercase tracking-widest">Khám cuối</th>
+                                <th class="px-6 py-4 text-xs font-black text-muted uppercase tracking-widest">Tình trạng</th>
+                                <th class="px-6 py-4 text-xs font-black text-muted uppercase tracking-widest">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="patient-tbody" class="divide-y divide-stone-100"></tbody>
+                    </table>
+                </div>
+                <div class="px-6 py-4 flex items-center justify-between border-t border-stone-100">
+                    <p class="text-sm text-muted font-medium" id="patient-count">Hiển thị 0 thai phụ</p>
+                    <div class="flex gap-1" id="pagination"></div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 space-y-4">
+                    <h3 class="text-lg font-bold flex items-center gap-2">🚨 Cảnh báo cần xử lý</h3>
+                    <div class="bg-danger-bg border border-red-200 p-5 rounded-2xl flex items-start gap-4">
+                        <div class="bg-danger p-2.5 rounded-full text-white flex-shrink-0">
+                            <span class="material-symbols-outlined mso">blood_pressure</span>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex justify-between items-start">
+                                <h4 class="font-bold text-base">Chỉ số huyết áp cao</h4>
+                                <span class="text-xs font-black text-danger">15 PHÚT TRƯỚC</span>
+                            </div>
+                            <p class="text-sm text-muted mt-1"><b>Lê Thị Lan</b> vừa cập nhật huyết áp 150/95 mmHg. Cần liên hệ tư vấn ngay.</p>
+                            <div class="mt-3 flex gap-2">
+                                <button onclick="callPatient('Lê Thị Lan','0912000111')" class="bg-danger text-white text-sm font-bold px-5 py-2 rounded-xl">📞 Gọi ngay</button>
+                                <button onclick="dismissAlert(this)" class="bg-white border border-stone-200 text-sm font-bold px-5 py-2 rounded-xl">Bỏ qua</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-warn-bg border border-amber-200 p-5 rounded-2xl flex items-start gap-4" id="alert-2">
+                        <div class="bg-warn p-2.5 rounded-full text-white flex-shrink-0">
+                            <span class="material-symbols-outlined mso">event_busy</span>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex justify-between items-start">
+                                <h4 class="font-bold text-base">Trễ lịch khám định kỳ</h4>
+                                <span class="text-xs font-black text-warn">HÔM NAY</span>
+                            </div>
+                            <p class="text-sm text-muted mt-1"><b>Nguyễn Thị Bé</b> đã trễ lịch khám tuần 32 hơn 3 ngày. Đã gửi nhắc nhở lần 2.</p>
+                            <div class="mt-3 flex gap-2">
+                                <button onclick="sendReminder2('Nguyễn Thị Bé')" class="bg-warn text-white text-sm font-bold px-5 py-2 rounded-xl">📩 Gửi nhắc lần 3</button>
+                                <button onclick="dismissAlert(this)" class="bg-white border border-stone-200 text-sm font-bold px-5 py-2 rounded-xl">Bỏ qua</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-card rounded-2xl p-6 border border-border">
+                    <div class="flex justify-between items-center mb-5">
+                        <h3 class="font-bold text-base">📅 Lịch khám ngày mai</h3>
+                        <button onclick="openSchedule()" class="text-primary text-sm font-bold">Xem tất cả</button>
+                    </div>
+                    <div class="space-y-4" id="tomorrow-schedule">
+                        <div class="flex items-center gap-3">
+                            <div class="text-center min-w-[44px]"><p class="text-xs font-bold text-muted">08:30</p></div>
+                            <div class="w-1 h-10 bg-primary rounded-full"></div>
+                            <div><p class="font-bold text-sm">Phạm Mỹ Linh</p><p class="text-xs text-muted">Khám tổng quát - Tuần 28</p></div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="text-center min-w-[44px]"><p class="text-xs font-bold text-muted">09:15</p></div>
+                            <div class="w-1 h-10 bg-accent rounded-full"></div>
+                            <div><p class="font-bold text-sm">Vương Tiểu Vy</p><p class="text-xs text-muted">Siêu âm 4D - Tuần 22</p></div>
+                        </div>
+                        <div class="flex items-center gap-3 opacity-50">
+                            <div class="text-center min-w-[44px]"><p class="text-xs font-bold text-muted">10:00</p></div>
+                            <div class="w-1 h-10 bg-stone-300 rounded-full"></div>
+                            <div><p class="font-bold text-sm">Trần Thảo Nhi</p><p class="text-xs text-muted">Xét nghiệm máu</p></div>
+                        </div>
+                    </div>
+                    <button onclick="openAddAppointment()" class="w-full mt-5 py-3 border-2 border-dashed border-stone-200 rounded-xl text-sm font-bold text-muted hover:bg-stone-50 transition">+ Thêm lịch hẹn</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Bottom Nav -->
+    <nav class="lg:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-2 pb-5 pt-2 bg-white/95 backdrop-blur-xl rounded-t-3xl z-50 shadow-[0_-4px_24px_rgba(0,0,0,.06)] border-t border-border">
+        <a class="flex flex-col items-center gap-0.5 text-primary px-4 py-2 rounded-2xl bg-primary-soft" href="#">
+            <span class="material-symbols-outlined mso text-2xl">explore</span>
+            <span class="text-xs font-bold">Khám phá</span>
+        </a>
+        <a class="flex flex-col items-center gap-0.5 text-stone-400 px-4 py-2" href="#">
+            <span class="material-symbols-outlined mso-o text-2xl">monitor_heart</span>
+            <span class="text-xs font-medium">Sức khỏe</span>
+        </a>
+        <a onclick="openAIChat()" class="flex flex-col items-center gap-0.5 text-stone-400 px-4 py-2 cursor-pointer" href="#">
+            <span class="material-symbols-outlined mso-o text-2xl">chat_bubble</span>
+            <span class="text-xs font-medium">Tin nhắn</span>
+        </a>
+        <a class="flex flex-col items-center gap-0.5 text-stone-400 px-4 py-2" href="#">
+            <span class="material-symbols-outlined mso-o text-2xl">person</span>
+            <span class="text-xs font-medium">Cá nhân</span>
+        </a>
+    </nav>
+
+    <!-- ========================= MODALS ========================= -->
+    <!-- AI Chat Modal -->
+    <div id="modal-ai-chat" class="modal-overlay">
+        <div class="modal-box">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary-light flex items-center justify-center text-white">
+                        <span class="material-symbols-outlined mso text-xl">spa</span>
+                    </div>
+                    <div><h3 class="font-extrabold text-base">Trợ lý Sen Hồng AI</h3><p class="text-xs text-accent font-semibold">● Đang trực tuyến</p></div>
+                </div>
+                <button onclick="closeModal('modal-ai-chat')" class="p-2 hover:bg-stone-100 rounded-full"><span class="material-symbols-outlined">close</span></button>
+            </div>
+            <div class="chat-messages space-y-3 mb-4 pr-1" id="chat-messages">
+                <div class="flex gap-2 items-end">
+                    <div class="w-8 h-8 rounded-full bg-primary-soft flex items-center justify-center text-primary flex-shrink-0"><span class="material-symbols-outlined mso text-sm">spa</span></div>
+                    <div class="chat-bubble-ai text-sm">Xin chào! Tôi là trợ lý AI của Sen Hồng. Bạn có thể hỏi tôi về chăm sóc sức khỏe thai kỳ, dinh dưỡng, hoặc bất kỳ điều gì bạn cần giúp đỡ! 🌸</div>
+                </div>
+            </div>
+            <div class="flex gap-2">
+                <input id="chat-input" type="text" placeholder="Nhập câu hỏi..." class="flex-1 bg-stone-100 border-none rounded-full px-4 py-3 text-sm focus:ring-2 focus:ring-primary/30" onkeydown="if(event.key==='Enter')sendChat()" />
+                <button onclick="sendChat()" id="chat-send-btn" class="w-11 h-11 rounded-full bg-primary text-white flex items-center justify-center hover:bg-primary-light transition flex-shrink-0">
+                    <span class="material-symbols-outlined mso text-xl">send</span>
+                </button>
+            </div>
+            <div class="mt-3 flex flex-wrap gap-2">
+                <button onclick="quickAsk('Tuần 12 bé phát triển như thế nào?')" class="text-xs font-semibold px-3 py-1.5 bg-primary-soft text-primary rounded-full hover:bg-pink-100 transition">Tuần 12 bé ra sao?</button>
+                <button onclick="quickAsk('Thực phẩm cần tránh khi mang thai?')" class="text-xs font-semibold px-3 py-1.5 bg-primary-soft text-primary rounded-full hover:bg-pink-100 transition">Thực phẩm cần tránh?</button>
+                <button onclick="quickAsk('Cách cải thiện giấc ngủ khi mang thai?')" class="text-xs font-semibold px-3 py-1.5 bg-primary-soft text-primary rounded-full hover:bg-pink-100 transition">Cải thiện giấc ngủ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Diary Modal -->
+    <div id="modal-diary" class="modal-overlay">
+        <div class="modal-box">
+            <div class="flex items-center justify-between mb-5">
+                <h3 class="font-extrabold text-xl">📖 Nhật ký thai kỳ</h3>
+                <button onclick="closeModal('modal-diary')" class="p-2 hover:bg-stone-100 rounded-full"><span class="material-symbols-outlined">close</span></button>
+            </div>
+            <div id="diary-entries" class="space-y-3 mb-5 max-h-64 overflow-y-auto"></div>
+            <textarea id="diary-input" rows="3" placeholder="Ghi lại cảm xúc, sự kiện hôm nay..." class="w-full bg-stone-100 border-none rounded-2xl p-4 text-sm focus:ring-2 focus:ring-primary/30 resize-none"></textarea>
+            <button onclick="saveDiaryEntry()" class="mt-3 w-full py-3 bg-gradient-to-r from-primary to-primary-light text-white font-bold rounded-xl shadow hover:shadow-md transition">💾 Lưu nhật ký</button>
+        </div>
+    </div>
+
+    <!-- Add Vital Modal -->
+    <div id="modal-add-vital" class="modal-overlay">
+        <div class="modal-box">
+            <div class="flex items-center justify-between mb-5">
+                <h3 class="font-extrabold text-xl">📊 Cập nhật chỉ số sức khỏe</h3>
+                <button onclick="closeModal('modal-add-vital')" class="p-2 hover:bg-stone-100 rounded-full"><span class="material-symbols-outlined">close</span></button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="text-xs font-bold text-muted uppercase tracking-wider block mb-1.5">Loại chỉ số</label>
+                    <select id="vital-type" class="w-full bg-stone-100 border-none rounded-xl px-4 py-3 text-base focus:ring-2 focus:ring-primary/20">
+                        <option value="bp">Huyết áp (mmHg)</option>
+                        <option value="glucose">Đường huyết (mg/dL)</option>
+                        <option value="weight">Cân nặng (kg)</option>
+                        <option value="sleep">Giấc ngủ (giờ)</option>
+                        <option value="fetal">Cử động thai (lần/giờ)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-muted uppercase tracking-wider block mb-1.5">Giá trị</label>
+                    <input id="vital-value" type="text" placeholder="VD: 115/75 hoặc 92" class="w-full bg-stone-100 border-none rounded-xl px-4 py-3 text-base focus:ring-2 focus:ring-primary/20" />
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-muted uppercase tracking-wider block mb-1.5">Ghi chú</label>
+                    <input id="vital-note" type="text" placeholder="Ghi chú thêm (tuỳ chọn)" class="w-full bg-stone-100 border-none rounded-xl px-4 py-3 text-base focus:ring-2 focus:ring-primary/20" />
+                </div>
+            </div>
+            <button onclick="saveVital()" class="mt-5 w-full py-3 bg-gradient-to-r from-primary to-primary-light text-white font-bold rounded-xl shadow hover:shadow-md transition">💾 Lưu chỉ số</button>
+        </div>
+    </div>
+
+    <!-- Add Task Modal -->
+    <div id="modal-add-task" class="modal-overlay">
+        <div class="modal-box">
+            <div class="flex items-center justify-between mb-5">
+                <h3 class="font-extrabold text-xl">➕ Thêm việc cần làm</h3>
+                <button onclick="closeModal('modal-add-task')" class="p-2 hover:bg-stone-100 rounded-full"><span class="material-symbols-outlined">close</span></button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="text-xs font-bold text-muted uppercase tracking-wider block mb-1.5">Tên việc</label>
+                    <input id="task-name" type="text" placeholder="VD: Uống vitamin, đi bộ 20 phút..." class="w-full bg-stone-100 border-none rounded-xl px-4 py-3 text-base focus:ring-2 focus:ring-primary/20" />
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-muted uppercase tracking-wider block mb-1.5">Ghi chú thời gian</label>
+                    <input id="task-time" type="text" placeholder="VD: Sáng sớm sau khi ăn" class="w-full bg-stone-100 border-none rounded-xl px-4 py-3 text-base focus:ring-2 focus:ring-primary/20" />
+                </div>
+            </div>
+            <button onclick="addTask()" class="mt-5 w-full py-3 bg-gradient-to-r from-primary to-primary-light text-white font-bold rounded-xl shadow hover:shadow-md transition">✅ Thêm vào danh sách</button>
+        </div>
+    </div>
+
+    <!-- Add Patient Modal -->
+    <div id="modal-add-patient" class="modal-overlay">
+        <div class="modal-box">
+            <div class="flex items-center justify-between mb-5">
+                <h3 class="font-extrabold text-xl">👩 Thêm thai phụ mới</h3>
+                <button onclick="closeModal('modal-add-patient')" class="p-2 hover:bg-stone-100 rounded-full"><span class="material-symbols-outlined">close</span></button>
+            </div>
+            <div class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-muted uppercase tracking-wider block mb-1.5">Họ tên</label>
+                        <input id="p-name" type="text" placeholder="Nguyễn Thị A" class="w-full bg-stone-100 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20" />
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-muted uppercase tracking-wider block mb-1.5">Số điện thoại</label>
+                        <input id="p-phone" type="text" placeholder="09xx xxx xxx" class="w-full bg-stone-100 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20" />
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-muted uppercase tracking-wider block mb-1.5">Tuần thai</label>
+                        <input id="p-week" type="number" placeholder="12" min="1" max="42" class="w-full bg-stone-100 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20" />
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-muted uppercase tracking-wider block mb-1.5">Dự sinh</label>
+                        <input id="p-due" type="date" class="w-full bg-stone-100 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20" />
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-muted uppercase tracking-wider block mb-1.5">Địa chỉ</label>
+                        <select id="p-district" class="w-full bg-stone-100 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20">
+                            <option>TP. Biên Hòa</option>
+                            <option>H. Trảng Bom</option>
+                            <option>H. Long Thành</option>
+                            <option>TP. Long Khánh</option>
+                            <option>H. Định Quán</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-muted uppercase tracking-wider block mb-1.5">Dân tộc</label>
+                        <select id="p-ethnic" class="w-full bg-stone-100 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20">
+                            <option>Kinh</option>
+                            <option>Chơ Ro</option>
+                            <option>Mạ</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <button onclick="savePatient()" class="mt-5 w-full py-3 bg-gradient-to-r from-primary to-primary-light text-white font-bold rounded-xl shadow hover:shadow-md transition">💾 Lưu hồ sơ</button>
+        </div>
+    </div>
+
+    <!-- Notifications Modal -->
+    <div id="modal-notifications" class="modal-overlay">
+        <div class="modal-box">
+            <div class="flex items-center justify-between mb-5">
+                <h3 class="font-extrabold text-xl">🔔 Thông báo</h3>
+                <button onclick="closeModal('modal-notifications')" class="p-2 hover:bg-stone-100 rounded-full"><span class="material-symbols-outlined">close</span></button>
+            </div>
+            <div id="notif-list" class="space-y-3 max-h-96 overflow-y-auto"></div>
+            <button onclick="clearNotifications()" class="mt-4 w-full py-2.5 border border-stone-200 rounded-xl text-sm font-bold text-muted hover:bg-stone-50 transition">Xóa tất cả thông báo</button>
+        </div>
+    </div>
+
+    <!-- Meal Plan Modal -->
+    <div id="modal-meal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="flex items-center justify-between mb-5">
+                <h3 class="font-extrabold text-xl">🍽️ Thực đơn tuần 28</h3>
+                <button onclick="closeModal('modal-meal')" class="p-2 hover:bg-stone-100 rounded-full"><span class="material-symbols-outlined">close</span></button>
+            </div>
+            <div id="meal-content" class="space-y-3">
+                <div class="flex items-center gap-3 text-sm text-muted"><div class="spinner !border-primary !border-t-transparent"></div> <span>Đang tải thực đơn từ AI...</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Birth Plan Modal -->
+    <div id="modal-birthplan" class="modal-overlay">
+        <div class="modal-box">
+            <div class="flex items-center justify-between mb-5">
+                <h3 class="font-extrabold text-xl">📋 Kế hoạch sinh</h3>
+                <button onclick="closeModal('modal-birthplan')" class="p-2 hover:bg-stone-100 rounded-full"><span class="material-symbols-outlined">close</span></button>
+            </div>
+            <div id="birthplan-content" class="space-y-3 text-sm text-muted">
+                <div class="flex items-center gap-3"><div class="spinner !border-primary !border-t-transparent"></div> <span>Đang tải kế hoạch từ AI...</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Week Detail Modal -->
+    <div id="modal-week-detail" class="modal-overlay">
+        <div class="modal-box">
+            <div class="flex items-center justify-between mb-5">
+                <h3 class="font-extrabold text-xl">🌱 Chi tiết tuần 12</h3>
+                <button onclick="closeModal('modal-week-detail')" class="p-2 hover:bg-stone-100 rounded-full"><span class="material-symbols-outlined">close</span></button>
+            </div>
+            <div id="week-detail-content" class="space-y-3 text-sm text-muted">
+                <div class="flex items-center gap-3"><div class="spinner !border-primary !border-t-transparent"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Appointment Modal -->
+    <div id="modal-add-appointment" class="modal-overlay">
+        <div class="modal-box">
+            <div class="flex items-center justify-between mb-5">
+                <h3 class="font-extrabold text-xl">📅 Thêm lịch hẹn</h3>
+                <button onclick="closeModal('modal-add-appointment')" class="p-2 hover:bg-stone-100 rounded-full"><span class="material-symbols-outlined">close</span></button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="text-xs font-bold text-muted uppercase tracking-wider block mb-1.5">Tên cuộc hẹn</label>
+                    <input id="appt-name" type="text" placeholder="VD: Khám thai định kỳ" class="w-full bg-stone-100 border-none rounded-xl px-4 py-3 text-base focus:ring-2 focus:ring-primary/20" />
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-muted uppercase tracking-wider block mb-1.5">Ngày</label>
+                        <input id="appt-date" type="date" class="w-full bg-stone-100 border-none rounded-xl px-4 py-3 text-base focus:ring-2 focus:ring-primary/20" />
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-muted uppercase tracking-wider block mb-1.5">Giờ</label>
+                        <input id="appt-time" type="time" class="w-full bg-stone-100 border-none rounded-xl px-4 py-3 text-base focus:ring-2 focus:ring-primary/20" />
+                    </div>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-muted uppercase tracking-wider block mb-1.5">Địa điểm</label>
+                    <input id="appt-loc" type="text" placeholder="VD: BV Đồng Nai" class="w-full bg-stone-100 border-none rounded-xl px-4 py-3 text-base focus:ring-2 focus:ring-primary/20" />
+                </div>
+            </div>
+            <button onclick="saveAppointment()" class="mt-5 w-full py-3 bg-gradient-to-r from-primary to-primary-light text-white font-bold rounded-xl shadow hover:shadow-md transition">💾 Lưu lịch hẹn</button>
+        </div>
+    </div>
+
+    <script>
+// ========================= DATA LAYER =========================
+const DB = {
+  get(key, def) { try { return JSON.parse(localStorage.getItem('sh_'+key)) ?? def; } catch { return def; } },
+  set(key, val) { try { localStorage.setItem('sh_'+key, JSON.stringify(val)); } catch {} }
+};
+
+let patients = DB.get('patients', [
+  { id:1, name:'Lê Thị Phương', phone:'0908 123 456', week:24, due:'15/08', district:'TP. Biên Hòa', ethnic:'Kinh', lastVisit:'Hôm qua', status:'normal' },
+  { id:2, name:'Ka H\'Phượng', phone:'0345 987 654', week:12, due:'02/11', district:'H. Trảng Bom', ethnic:'Chơ Ro', lastVisit:'10 ngày trước', status:'warn' },
+  { id:3, name:'Trần Tuyết Mai', phone:'0977 444 555', week:36, due:'20/05', district:'H. Long Thành', ethnic:'Kinh', lastVisit:'3 ngày trước', status:'soon' },
+  { id:4, name:'Nguyễn Hồng Hạnh', phone:'0912 333 444', week:8, due:'10/12', district:'TP. Long Khánh', ethnic:'Kinh', lastVisit:'5 ngày trước', status:'normal' },
+]);
+
+let tasks = DB.get('tasks', [
+  { id:1, text:'Uống Vitamin tổng hợp', note:'Sáng sớm sau khi ăn', done:false },
+  { id:2, text:'Đi bộ 20 phút', note:'Công viên gần nhà', done:false },
+  { id:3, text:'Uống 2L nước', note:'Đã hoàn thành', done:true },
+]);
+
+let notifications = DB.get('notifications', [
+  { id:1, text:'Mẹ Lan cập nhật huyết áp mới: 115/75', time:'Vừa xong', read:false },
+  { id:2, text:'Nhắc nhở: Khám thai Thứ 7 này lúc 8:30', time:'1 giờ trước', read:false },
+  { id:3, text:'Bé đạt cột mốc phát triển tuần 28!', time:'Hôm qua', read:true },
+]);
+
+let diaryEntries = DB.get('diary', []);
+let vitals = DB.get('vitals', []);
+let currentStatusFilter = 'all';
+let currentPage = 1;
+const PAGE_SIZE = 10;
+
+// ========================= PAGE SWITCHING =========================
+function switchPage(role) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.role-tab').forEach(t => { t.classList.remove('active'); t.classList.add('text-stone-500'); });
+  document.getElementById('page-' + role).classList.add('active');
+  const tab = document.getElementById('tab-' + role);
+  tab.classList.add('active');
+  tab.classList.remove('text-stone-500');
+}
+
+// ========================= MODAL HELPERS =========================
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if(e.target === m) m.classList.remove('open'); });
+});
+
+// ========================= TOAST =========================
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ========================= TASKS =========================
+function renderTasks() {
+  const list = document.getElementById('task-list');
+  list.innerHTML = tasks.map(t => `
+    <div class="bg-card p-5 rounded-2xl flex items-center gap-4 border border-border card-hover ${t.done?'opacity-50':''}">
+      <div onclick="toggleTask(${t.id})" class="w-7 h-7 rounded-lg border-2 ${t.done?'bg-accent border-accent flex items-center justify-center':'border-primary'} flex-shrink-0 cursor-pointer">
+        ${t.done?'<span class="material-symbols-outlined text-white text-sm">check</span>':''}
+      </div>
+      <div class="flex-1 ${t.done?'line-through':''}">
+        <p class="font-bold text-base">${t.text}</p>
+        <p class="text-sm text-muted">${t.note}</p>
+      </div>
+      <button onclick="deleteTask(${t.id})" class="text-stone-300 hover:text-danger transition">
+        <span class="material-symbols-outlined mso-o text-xl">delete</span>
+      </button>
+    </div>
+  `).join('');
+}
+
+function toggleTask(id) {
+  tasks = tasks.map(t => t.id===id ? {...t, done:!t.done} : t);
+  DB.set('tasks', tasks);
+  renderTasks();
+  toast('✅ Đã cập nhật!');
+}
+
+function deleteTask(id) {
+  tasks = tasks.filter(t => t.id!==id);
+  DB.set('tasks', tasks);
+  renderTasks();
+}
+
+function openAddTask() { openModal('modal-add-task'); }
+
+function addTask() {
+  const name = document.getElementById('task-name').value.trim();
+  const time = document.getElementById('task-time').value.trim();
+  if(!name) { toast('⚠️ Vui lòng nhập tên việc cần làm'); return; }
+  tasks.push({ id: Date.now(), text: name, note: time||'Hôm nay', done: false });
+  DB.set('tasks', tasks);
+  renderTasks();
+  closeModal('modal-add-task');
+  toast('✅ Đã thêm việc cần làm!');
+  document.getElementById('task-name').value = '';
+  document.getElementById('task-time').value = '';
+}
+
+// ========================= PATIENTS TABLE =========================
+function getStatusBadge(s) {
+  if(s==='normal') return '<span class="bg-accent-bg text-accent text-xs font-black px-3 py-1.5 rounded-full">✅ BÌNH THƯỜNG</span>';
+  if(s==='warn') return '<span class="bg-danger-bg text-danger text-xs font-black px-3 py-1.5 rounded-full pulse-soft">⚠️ CẢNH BÁO</span>';
+  if(s==='soon') return '<span class="bg-blue-50 text-blue-700 text-xs font-black px-3 py-1.5 rounded-full">🤱 SẮP SINH</span>';
+  return '';
+}
+
+function getFilteredPatients() {
+  const q = (document.getElementById('search-input')?.value||'').toLowerCase();
+  const dist = document.getElementById('filter-district')?.value||'';
+  const eth = document.getElementById('filter-ethnic')?.value||'';
+  return patients.filter(p => {
+    const matchQ = !q || p.name.toLowerCase().includes(q) || p.phone.includes(q);
+    const matchDist = dist==='Tất cả địa điểm' || !dist || p.district===dist;
+    const matchEth = eth==='Tất cả' || !eth || p.ethnic===eth;
+    const matchStatus = currentStatusFilter==='all' || p.status===currentStatusFilter || (currentStatusFilter==='warn' && p.status==='warn');
+    return matchQ && matchDist && matchEth && matchStatus;
+  });
+}
+
+function renderPatients() {
+  const filtered = getFilteredPatients();
+  const start = (currentPage-1)*PAGE_SIZE;
+  const paged = filtered.slice(start, start+PAGE_SIZE);
+  const tbody = document.getElementById('patient-tbody');
+  if(!tbody) return;
+
+  tbody.innerHTML = paged.map(p => `
+    <tr class="hover:bg-primary-soft/30 transition-colors">
+      <td class="px-6 py-5">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-full bg-primary-soft flex items-center justify-center text-primary font-bold text-sm">${p.name.split(' ').slice(-2).map(w=>w[0]).join('')}</div>
+          <div><p class="font-bold text-base">${p.name}</p><p class="text-sm text-muted">${p.phone}</p></div>
+        </div>
+      </td>
+      <td class="px-6 py-5"><span class="font-bold text-base">Tuần ${p.week}</span><br/><span class="text-xs text-muted">Dự sinh: ${p.due}</span></td>
+      <td class="px-6 py-5 text-base text-muted">${p.district}</td>
+      <td class="px-6 py-5 text-base ${p.ethnic!=='Kinh'?'font-semibold text-primary':'text-muted'}">${p.ethnic}</td>
+      <td class="px-6 py-5 text-base ${p.lastVisit.includes('10')||p.lastVisit.includes('5')?'text-warn font-semibold':'text-muted'}">${p.lastVisit}</td>
+      <td class="px-6 py-5">${getStatusBadge(p.status)}</td>
+      <td class="px-6 py-5">
+        <div class="flex gap-1">
+          <button onclick="viewPatient(${p.id})" class="p-2 hover:bg-primary-soft rounded-lg transition" title="Xem hồ sơ"><span class="material-symbols-outlined mso-o text-primary text-lg">visibility</span></button>
+          <button onclick="callPatient('${p.name}','${p.phone}')" class="p-2 hover:bg-accent-bg rounded-lg transition" title="Gọi điện"><span class="material-symbols-outlined mso-o text-accent text-lg">phone</span></button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+
+  document.getElementById('patient-count').textContent = `Hiển thị ${Math.min(start+1, filtered.length)}–${Math.min(start+PAGE_SIZE, filtered.length)} trên ${filtered.length} thai phụ`;
+  renderPagination(filtered.length);
+  document.getElementById('doc-total').textContent = patients.length.toLocaleString('vi-VN');
+  document.getElementById('doc-risk').textContent = patients.filter(p=>p.status==='warn').length;
+}
+
+function renderPagination(total) {
+  const pages = Math.ceil(total/PAGE_SIZE);
+  const pg = document.getElementById('pagination');
+  if(!pg) return;
+  if(pages <= 1) { pg.innerHTML=''; return; }
+  let html = `<button onclick="changePage(${Math.max(1,currentPage-1)})" class="p-2 rounded-full hover:bg-stone-100"><span class="material-symbols-outlined text-lg">chevron_left</span></button>`;
+  for(let i=1;i<=Math.min(pages,5);i++) {
+    html += `<button onclick="changePage(${i})" class="w-9 h-9 rounded-full ${i===currentPage?'bg-primary text-white':'hover:bg-stone-100'} text-sm font-bold flex items-center justify-center">${i}</button>`;
+  }
+  html += `<button onclick="changePage(${Math.min(pages,currentPage+1)})" class="p-2 rounded-full hover:bg-stone-100"><span class="material-symbols-outlined text-lg">chevron_right</span></button>`;
+  pg.innerHTML = html;
+}
+
+function changePage(p) { currentPage=p; renderPatients(); }
+function filterPatients() { currentPage=1; renderPatients(); }
+
+function setStatusFilter(f, btn) {
+  currentStatusFilter = f;
+  ['all','normal','warn'].forEach(x => {
+    const b = document.getElementById('filter-'+x);
+    if(b) { b.className = x===f ? 'bg-primary text-white text-sm font-bold px-5 py-3 rounded-xl' : 'bg-stone-100 text-stone-600 text-sm font-bold px-5 py-3 rounded-xl hover:bg-accent-bg transition'; }
+  });
+  filterPatients();
+}
+
+function openAddPatient() { openModal('modal-add-patient'); }
+
+function savePatient() {
+  const name = document.getElementById('p-name').value.trim();
+  const phone = document.getElementById('p-phone').value.trim();
+  const week = document.getElementById('p-week').value;
+  const due = document.getElementById('p-due').value;
+  const district = document.getElementById('p-district').value;
+  const ethnic = document.getElementById('p-ethnic').value;
+  if(!name||!phone||!week) { toast('⚠️ Vui lòng điền đầy đủ thông tin'); return; }
+  patients.push({ id:Date.now(), name, phone, week:parseInt(week), due: due||'—', district, ethnic, lastVisit:'Hôm nay', status:'normal' });
+  DB.set('patients', patients);
+  renderPatients();
+  closeModal('modal-add-patient');
+  addNotification(`👩 Thai phụ mới: ${name} (Tuần ${week}) vừa được thêm vào hệ thống`);
+  toast('✅ Đã thêm hồ sơ thai phụ!');
+  ['p-name','p-phone','p-week','p-due'].forEach(id => document.getElementById(id).value='');
+}
+
+function viewPatient(id) {
+  const p = patients.find(x=>x.id===id);
+  if(!p) return;
+  toast(`👁 Xem hồ sơ: ${p.name}`);
+}
+
+function callPatient(name, phone) {
+  toast(`📞 Đang gọi ${name} — ${phone}`);
+  addNotification(`📞 Đã gọi điện cho ${name} lúc ${new Date().toLocaleTimeString('vi-VN')}`);
+}
+
+// ========================= EXPORT CSV =========================
+function exportCSV() {
+  const rows = [['Họ tên','SĐT','Tuần thai','Dự sinh','Địa chỉ','Dân tộc','Khám cuối','Tình trạng']];
+  patients.forEach(p => rows.push([p.name,p.phone,p.week,p.due,p.district,p.ethnic,p.lastVisit,p.status]));
+  const csv = rows.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
+  const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download='sen-hong-thai-phu.csv'; a.click();
+  URL.revokeObjectURL(url);
+  toast('📥 Đã xuất CSV!');
+}
+
+// ========================= DIARY =========================
+function openDiary() {
+  renderDiary();
+  openModal('modal-diary');
+}
+
+function renderDiary() {
+  const list = document.getElementById('diary-entries');
+  if(!diaryEntries.length) { list.innerHTML='<p class="text-sm text-muted text-center py-4">Chưa có nhật ký nào. Hãy ghi lại kỷ niệm đầu tiên! 💕</p>'; return; }
+  list.innerHTML = diaryEntries.slice().reverse().map(e=>`
+    <div class="bg-primary-soft/40 rounded-xl p-4">
+      <p class="text-xs text-muted font-semibold mb-1">${e.date}</p>
+      <p class="text-sm leading-relaxed">${e.text}</p>
+    </div>
+  `).join('');
+}
+
+function saveDiaryEntry() {
+  const txt = document.getElementById('diary-input').value.trim();
+  if(!txt) { toast('⚠️ Vui lòng nhập nội dung'); return; }
+  diaryEntries.push({ text: txt, date: new Date().toLocaleString('vi-VN') });
+  DB.set('diary', diaryEntries);
+  document.getElementById('diary-input').value = '';
+  renderDiary();
+  toast('💾 Đã lưu nhật ký!');
+  addNotification('📖 Nhật ký mới vừa được ghi lại');
+}
+
+// ========================= VITALS =========================
+function openAddVital() { openModal('modal-add-vital'); }
+
+function saveVital() {
+  const type = document.getElementById('vital-type').value;
+  const value = document.getElementById('vital-value').value.trim();
+  const note = document.getElementById('vital-note').value.trim();
+  if(!value) { toast('⚠️ Vui lòng nhập giá trị'); return; }
+
+  const typeLabels = { bp:'Huyết áp', glucose:'Đường huyết', weight:'Cân nặng', sleep:'Giấc ngủ', fetal:'Cử động thai' };
+  const typeUnits = { bp:'mmHg', glucose:'mg/dL', weight:'kg', sleep:'giờ', fetal:'lần/giờ' };
+  const entry = { type, label: typeLabels[type], value, unit: typeUnits[type], note, time: new Date().toLocaleString('vi-VN') };
+  vitals.push(entry);
+  DB.set('vitals', vitals);
+
+  // Update stat cards
+  if(type==='bp') document.getElementById('stat-bp').textContent = value;
+  if(type==='sleep') document.getElementById('stat-sleep').textContent = value+' giờ';
+  if(type==='fetal') { document.getElementById('stat-fetal-sub').textContent = value+' lần/giờ'; }
+
+  // Add to vitals list
+  const list = document.getElementById('vitals-list');
+  const dot = type==='sleep'||type==='glucose' ? 'bg-amber-500' : 'bg-accent';
+  const badge = parseFloat(value) > 120 ? '<span class="text-sm font-bold px-3 py-1 bg-danger-bg text-danger rounded-full">Cao</span>' : '<span class="text-sm font-bold px-3 py-1 bg-accent-bg text-accent rounded-full">Tốt</span>';
+  const newRow = document.createElement('div');
+  newRow.className = 'flex items-center justify-between p-4 bg-surface rounded-xl';
+  newRow.innerHTML = `<div class="flex items-center gap-3"><div class="w-3 h-3 rounded-full ${dot}"></div><div><p class="font-bold text-base">${typeLabels[type]}: ${value} ${typeUnits[type]}</p><p class="text-sm text-muted">${new Date().toLocaleString('vi-VN')}</p></div></div>${badge}`;
+  list.prepend(newRow);
+
+  closeModal('modal-add-vital');
+  toast('✅ Đã lưu chỉ số sức khỏe!');
+  addNotification(`📊 Chỉ số mới: ${typeLabels[type]} ${value} ${typeUnits[type]}`);
+  document.getElementById('vital-value').value = '';
+  document.getElementById('vital-note').value = '';
+}
+
+// ========================= CARE ACTIONS =========================
+function markCareDone(btn, label) {
+  btn.textContent = '✅ Đã hoàn thành!';
+  btn.className = 'w-full py-3 bg-accent-bg text-accent font-bold rounded-xl text-base cursor-default';
+  btn.disabled = true;
+  toast(`✅ Đã ghi nhận: ${label}`);
+  addNotification(`💪 Người thân đã thực hiện: "${label}"`);
+}
+
+function saveReminder(text) {
+  const reminders = DB.get('reminders', []);
+  reminders.push({ text, time: new Date().toLocaleString('vi-VN') });
+  DB.set('reminders', reminders);
+  toast('💡 Đã lưu nhắc nhở!');
+  addNotification(`🔔 Nhắc nhở mới: ${text}`);
+}
+
+// ========================= NOTIFICATIONS =========================
+function addNotification(text) {
+  notifications.unshift({ id:Date.now(), text, time:'Vừa xong', read:false });
+  DB.set('notifications', notifications);
+  const dot = document.getElementById('notif-dot');
+  if(dot) dot.style.display = 'block';
+}
+
+function openNotifications() {
+  const list = document.getElementById('notif-list');
+  if(!notifications.length) { list.innerHTML='<p class="text-center text-sm text-muted py-8">Không có thông báo mới</p>'; }
+  else {
+    list.innerHTML = notifications.map(n=>`
+      <div class="p-4 rounded-xl ${n.read?'bg-stone-50':'bg-primary-soft/40'} flex items-start gap-3">
+        <div class="w-2 h-2 rounded-full ${n.read?'bg-stone-300':'bg-primary'} mt-2 flex-shrink-0"></div>
+        <div><p class="text-sm leading-relaxed">${n.text}</p><p class="text-xs text-muted mt-1">${n.time}</p></div>
+      </div>
+    `).join('');
+  }
+  notifications = notifications.map(n=>({...n,read:true}));
+  DB.set('notifications', notifications);
+  document.getElementById('notif-dot').style.display='none';
+  openModal('modal-notifications');
+}
+
+function clearNotifications() {
+  notifications = [];
+  DB.set('notifications', notifications);
+  closeModal('modal-notifications');
+  toast('🗑️ Đã xóa tất cả thông báo');
+}
+
+// ========================= ALERTS =========================
+function dismissAlert(btn) {
+  btn.closest('.bg-danger-bg, .bg-warn-bg').style.display='none';
+  toast('✅ Đã bỏ qua cảnh báo');
+}
+
+function sendReminder2(name) {
+  toast(`📩 Đã gửi nhắc nhở lần 3 cho ${name}`);
+  addNotification(`📩 Gửi nhắc khám lần 3 cho ${name}`);
+}
+
+// ========================= APPOINTMENTS =========================
+function openAddAppointment() { openModal('modal-add-appointment'); }
+
+function saveAppointment() {
+  const name = document.getElementById('appt-name').value.trim();
+  const date = document.getElementById('appt-date').value;
+  const time = document.getElementById('appt-time').value;
+  const loc = document.getElementById('appt-loc').value.trim();
+  if(!name) { toast('⚠️ Vui lòng nhập tên lịch hẹn'); return; }
+  closeModal('modal-add-appointment');
+  toast(`📅 Đã lưu lịch hẹn: ${name}`);
+  addNotification(`📅 Lịch hẹn mới: ${name} — ${date} ${time} tại ${loc}`);
+  ['appt-name','appt-date','appt-time','appt-loc'].forEach(id=>document.getElementById(id).value='');
+}
+
+// ========================= VITAL DETAIL =========================
+function openVitalDetail(type) {
+  const labels = { weight:'Cân nặng', fetal:'Cử động thai', bp:'Huyết áp', sleep:'Giấc ngủ' };
+  toast(`📊 Xem lịch sử: ${labels[type]}`);
+}
+
+// ========================= MISC ACTIONS =========================
+function openAllSuggestions() { toast('📋 Đang tải thêm gợi ý...'); }
+function openVitalDetail(t) { openAddVital(); }
+function openSchedule() { toast('📅 Xem lịch khám đầy đủ'); }
+function openClassInfo() { toast('📹 Lớp học tiền sản: CN 13/04 lúc 9:00 sáng — Nền tảng Sen Hồng'); }
+function openProfile() { toast('👤 Trang cá nhân đang phát triển'); }
+
+// ========================= EMOTION =========================
+function selectEmotion(btn, emotion) {
+  document.querySelectorAll('.emotion-btn').forEach(b => b.classList.remove('selected','bg-primary','text-white','border-primary'));
+  btn.classList.add('selected','bg-primary','text-white','border-primary');
+  const tipBox = document.getElementById('emotion-ai-tip');
+  const tipText = document.getElementById('emotion-ai-text');
+  tipBox.classList.remove('hidden');
+  tipText.textContent = '...';
+  askClaudeEmotion(emotion).then(r => { tipText.textContent = r; });
+  addNotification(`❤️ Mẹ ghi nhận cảm xúc: ${emotion}`);
+}
+
+async function askClaudeEmotion(emotion) {
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:200,
+        messages:[{ role:'user', content:`Mẹ bầu tuần 12 vừa ghi nhận cảm xúc: "${emotion}". Hãy viết 2-3 câu lời khuyên ngắn gọn, ấm áp bằng tiếng Việt để giúp mẹ cảm thấy được quan tâm và có thêm động lực. Không cần tiêu đề.` }]
+      })
+    });
+    const d = await res.json();
+    return d.content?.[0]?.text || 'Cảm ơn mẹ đã chia sẻ! Hãy luôn lắng nghe cơ thể và nghỉ ngơi đầy đủ nhé 💕';
+  } catch { return 'Cảm ơn mẹ đã chia sẻ! Bé yêu đang cảm nhận được tình yêu từ mẹ mỗi ngày 💕'; }
+}
+
+// ========================= AI CHAT =========================
+let chatHistory = [];
+
+function openAIChat() { openModal('modal-ai-chat'); }
+
+function quickAsk(q) {
+  document.getElementById('chat-input').value = q;
+  sendChat();
+}
+
+async function sendChat() {
+  const input = document.getElementById('chat-input');
+  const msg = input.value.trim();
+  if(!msg) return;
+  input.value = '';
+
+  appendChatMsg(msg, 'user');
+  chatHistory.push({ role:'user', content: msg });
+
+  const typing = appendTyping();
+  const btn = document.getElementById('chat-send-btn');
+  btn.disabled = true;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:400,
+        system: 'Bạn là trợ lý AI của ứng dụng Sen Hồng — chuyên về chăm sóc sức khỏe mẹ bầu và thai nhi tại Việt Nam. Trả lời bằng tiếng Việt, ngắn gọn, ấm áp, dễ hiểu. Không dùng markdown nhiều. Ưu tiên tư vấn thực tế.',
+        messages: chatHistory
+      })
+    });
+    const d = await res.json();
+    typing.remove();
+    const reply = d.content?.[0]?.text || 'Xin lỗi, tôi chưa thể trả lời ngay lúc này. Vui lòng thử lại!';
+    appendChatMsg(reply, 'ai');
+    chatHistory.push({ role:'assistant', content: reply });
+    if(chatHistory.length > 20) chatHistory = chatHistory.slice(-20);
+  } catch(e) {
+    typing.remove();
+    appendChatMsg('Có lỗi kết nối. Vui lòng thử lại! 🙏', 'ai');
+  }
+  btn.disabled = false;
+}
+
+function appendChatMsg(text, role) {
+  const box = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = 'flex gap-2 items-end ' + (role==='user'?'justify-end':'');
+  div.innerHTML = role==='ai'
+    ? `<div class="w-8 h-8 rounded-full bg-primary-soft flex items-center justify-center text-primary flex-shrink-0"><span class="material-symbols-outlined mso text-sm">spa</span></div><div class="chat-bubble-ai text-sm">${text}</div>`
+    : `<div class="chat-bubble-user text-sm">${text}</div>`;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+  return div;
+}
+
+function appendTyping() {
+  const box = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = 'flex gap-2 items-end';
+  div.innerHTML = `<div class="w-8 h-8 rounded-full bg-primary-soft flex items-center justify-center text-primary flex-shrink-0"><span class="material-symbols-outlined mso text-sm">spa</span></div><div class="chat-bubble-ai text-sm flex items-center gap-1"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>`;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+  return div;
+}
+
+// ========================= MEAL PLAN =========================
+async function openMealPlan() {
+  openModal('modal-meal');
+  document.getElementById('meal-content').innerHTML = '<div class="flex items-center gap-3 text-sm text-muted"><div class="spinner !border-primary !border-t-transparent"></div><span>Đang tải thực đơn từ AI...</span></div>';
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:600,
+        messages:[{role:'user',content:'Tạo thực đơn 3 ngày cho mẹ bầu tuần 28 tại Việt Nam. Mỗi ngày gồm: sáng, trưa, tối, bữa phụ. Ưu tiên Omega-3, sắt, canxi. Định dạng đơn giản, dễ đọc. Không markdown, chỉ text thuần.'}]
+      })
+    });
+    const d = await res.json();
+    const text = d.content?.[0]?.text || 'Không thể tải thực đơn';
+    document.getElementById('meal-content').innerHTML = `<div class="text-sm leading-relaxed whitespace-pre-wrap text-stone-700">${text}</div>`;
+  } catch {
+    document.getElementById('meal-content').innerHTML = '<p class="text-sm text-danger">Không thể kết nối AI. Vui lòng thử lại.</p>';
+  }
+}
+
+// ========================= BIRTH PLAN =========================
+async function openBirthPlan() {
+  openModal('modal-birthplan');
+  document.getElementById('birthplan-content').innerHTML = '<div class="flex items-center gap-3 text-sm text-muted"><div class="spinner !border-primary !border-t-transparent"></div><span>Đang tải...</span></div>';
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:500,
+        messages:[{role:'user',content:'Tạo kế hoạch sinh cho mẹ bầu tuần 28 tại bệnh viện Đồng Nai. Bao gồm: chuẩn bị trước sinh, danh sách đồ cần mang, lưu ý quan trọng. Viết bằng tiếng Việt, dễ hiểu. Không markdown.'}]
+      })
+    });
+    const d = await res.json();
+    document.getElementById('birthplan-content').innerHTML = `<div class="text-sm leading-relaxed whitespace-pre-wrap text-stone-700">${d.content?.[0]?.text||'Lỗi'}</div>`;
+  } catch {
+    document.getElementById('birthplan-content').innerHTML = '<p class="text-sm text-danger">Không thể kết nối. Thử lại sau.</p>';
+  }
+}
+
+// ========================= WEEK DETAIL =========================
+async function openWeekDetail() {
+  openModal('modal-week-detail');
+  document.getElementById('week-detail-content').innerHTML = '<div class="flex items-center gap-3 text-sm text-muted"><div class="spinner !border-primary !border-t-transparent"></div><span>Đang tải...</span></div>';
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:400,
+        messages:[{role:'user',content:'Mô tả sự phát triển của thai nhi tuần 12 và những thay đổi của mẹ bầu. Viết bằng tiếng Việt, ấm áp, dễ hiểu, khoảng 200 từ. Không dùng markdown.'}]
+      })
+    });
+    const d = await res.json();
+    document.getElementById('week-detail-content').innerHTML = `<div class="text-sm leading-relaxed whitespace-pre-wrap text-stone-700">${d.content?.[0]?.text||'Lỗi'}</div>`;
+  } catch {
+    document.getElementById('week-detail-content').innerHTML = '<p class="text-sm text-danger">Không thể kết nối. Thử lại sau.</p>';
+  }
+}
+
+// ========================= INIT =========================
+document.addEventListener('DOMContentLoaded', () => {
+  renderTasks();
+  renderPatients();
+  // Check unread notifications
+  if(!notifications.some(n=>!n.read)) {
+    const dot = document.getElementById('notif-dot');
+    if(dot) dot.style.display='none';
+  }
+});
+    </script>
+</body>
+</html>
