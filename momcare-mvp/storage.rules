@@ -1,0 +1,13 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /csv_exports/{fileName} {
+      allow read: if request.auth != null
+        && request.auth.token.role == 'midwife';
+      allow write: if false; // Chi Cloud Function duoc ghi
+    }
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

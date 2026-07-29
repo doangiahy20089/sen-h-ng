@@ -1,0 +1,109 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // === HAM HO TRO ===
+
+    // Kiem tra dang nhap
+    function daDangNhap() {
+      return request.auth != null;
+    }
+
+    // Kiem tra vai tro thai phu
+    function laThaiPhu() {
+      return daDangNhap() && request.auth.token.role == 'pregnant_woman';
+    }
+
+    // Kiem tra vai tro co do thon ban
+    function laCoDo() {
+      return daDangNhap() && request.auth.token.role == 'midwife';
+    }
+
+    // Kiem tra dong y (consent gate) - thai phu phai dong y truoc khi ghi du lieu
+    function daDongY(motherId) {
+      return get(/databases/$(database)/documents/HO_SO_THAI_KY/$(motherId)).data.consent_status == true;
+    }
+
+    // Kiem tra co do duoc phan cong cho thai phu nay
+    function duocPhanCong(motherId) {
+      return get(/databases/$(database)/documents/HO_SO_THAI_KY/$(motherId)).data.assigned_co_do_id == request.auth.uid;
+    }
+
+    // === HO_SO_THAI_KY ===
+    match /HO_SO_THAI_KY/{mother_id} {
+      // Thai phu: chi doc/ghi ho so cua chinh minh
+      allow read: if laThaiPhu() && mother_id == request.auth.uid;
+      allow create: if laThaiPhu() && mother_id == request.auth.uid;
+      allow update: if laThaiPhu() && mother_id == request.auth.uid;
+      allow delete: if false; // Khong cho xoa ho so
+
+      // Co do: chi doc ho so duoc phan cong cho minh
+      // KHONG duoc ghi/sua ho so thai ky
+      allow read: if laCoDo()
+        && resource.data.assigned_co_do_id == request.auth.uid;
+    }
+
+    // === CHI_SO_SUC_KHOE ===
+    match /CHI_SO_SUC_KHOE/{record_id} {
+      // Thai phu: doc/ghi chi so cua minh - BAT BUOC da dong y
+      allow read: if laThaiPhu()
+        && resource.data.mother_id == request.auth.uid;
+
+      allow create: if laThaiPhu()
+        && request.resource.data.mother_id == request.auth.uid
+        && daDongY(request.auth.uid);
+
+      allow update: if laThaiPhu()
+        && resource.data.mother_id == request.auth.uid
+        && daDongY(request.auth.uid);
+
+      allow delete: if false; // Khong cho xoa chi so suc khoe
+
+      // Co do: chi doc chi so cua thai phu duoc phan cong
+      allow read: if laCoDo()
+        && duocPhanCong(resource.data.mother_id);
+    }
+
+    // === CHATBOT_LOGS ===
+    match /CHATBOT_LOGS/{log_id} {
+      // Thai phu: doc/ghi log cua minh - BAT BUOC da dong y
+      allow read: if laThaiPhu()
+        && resource.data.mother_id == request.auth.uid;
+
+      allow create: if laThaiPhu()
+        && request.resource.data.mother_id == request.auth.uid
+        && daDongY(request.auth.uid);
+
+      // Khong cho thai phu sua/xoa log (dam bao tinh toan ven)
+      allow update, delete: if false;
+
+      // Co do: doc log flagged cua thai phu duoc phan cong
+      allow read: if laCoDo()
+        && duocPhanCong(resource.data.mother_id);
+
+      // Co do: cap nhat reviewed_by khi xem xet canh bao
+      allow update: if laCoDo()
+        && duocPhanCong(resource.data.mother_id)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['reviewed_by']);
+    }
+
+    // === AUDIT_LOG ===
+    match /AUDIT_LOG/{log_id} {
+      // Chi Cloud Function duoc ghi (admin SDK bo qua rules)
+      // Client KHONG duoc ghi/sua/xoa
+      allow read: if false;
+      allow write: if false;
+    }
+
+    // === BAO_CAO_TONG_HOP ===
+    match /BAO_CAO_TONG_HOP/{report_id} {
+      // Chi Cloud Function ghi; khong co client nao doc truc tiep
+      allow read, write: if false;
+    }
+
+    // === MAC DINH: CHAN TAT CA ===
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
